@@ -1,26 +1,187 @@
 @import "tailwindcss";
 
+/* Class-based dark mode: .dark on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---- Semantic tokens (swap in dark) ---- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #faf8f3;
+  --surface: #ffffff;
+  --ink: #1a1917;
+  --muted: #efebe1;
+  --muted-ink: #6b6659;
+  --border: #e4ded0;
+  --lime: #a3e635;
+  --lime-strong: #84cc16;
+  --on-lime: #243305;
+  --ring: #84cc16;
+  --grain-opacity: 0.05;
 }
 
+.dark {
+  --bg: #0b0b0a;
+  --surface: #141412;
+  --ink: #f5f3ec;
+  --muted: #1e1e1b;
+  --muted-ink: #a8a296;
+  --border: #2a2a26;
+  --lime: #a3e635;
+  --lime-strong: #a3e635;
+  --on-lime: #0b0b0a;
+  --ring: #a3e635;
+  --grain-opacity: 0.08;
+}
+
+/* ---- Map tokens to Tailwind utilities (inline = follows var()) ---- */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-muted-ink: var(--muted-ink);
+  --color-border: var(--border);
+  --color-lime: var(--lime);
+  --color-lime-strong: var(--lime-strong);
+  --color-on-lime: var(--on-lime);
+  --color-ring: var(--ring);
+
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  /* Themed page scrollbar — matches the site's border/lime palette */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  html::-webkit-scrollbar {
+    width: 10px;
+  }
+  html::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  html::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  html::-webkit-scrollbar-thumb:hover {
+    background: var(--lime-strong);
+    background-clip: padding-box;
+  }
+  ::selection {
+    background: var(--lime);
+    color: var(--on-lime);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    line-height: 1.02;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Grain overlay (handcrafted texture) — apply .grain to a positioned element */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Reveal: hidden initial state; JS adds .is-in. No-JS/reduced-motion => visible. */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+.no-js .reveal {
+  opacity: 1;
+  transform: none;
+}
+
+/* Modal gallery crossfade */
+.modal-slide {
+  transition: opacity 0.5s ease;
+}
+
+/* Themed scrollbar — matches the site's border/lime palette */
+.modal-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.modal-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.modal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--lime-strong);
+  background-clip: padding-box;
+}
+
+/* Global reduced-motion safety */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Continuous, gentle float for toolkit icons */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+.floaty {
+  animation: floaty 4s ease-in-out infinite;
+}
+/* Slow spin for the globe accent */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.spin-slow {
+  animation: spin-slow 22s linear infinite;
 }
