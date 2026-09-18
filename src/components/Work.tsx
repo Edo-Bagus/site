@@ -1,3 +1,4 @@
+import Image from "next/image";
 import fs from "node:fs";
 import path from "node:path";
 import Link from "next/link";
@@ -25,11 +26,12 @@ function Thumb({ p }: { p: Project }) {
     <div className="grain relative aspect-[16/10] overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-muted to-surface">
       {cover ? (
         /* full-bleed cover: fills the 16:10 frame, cropping as needed */
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img
+        <Image
           src={cover}
-          alt={p.title}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          alt={`${p.title} — ${p.role}`}
+          fill
+          sizes="(max-width: 768px) 92vw, (max-width: 1280px) 45vw, 380px"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
       ) : (
         <div className="absolute inset-0 grid place-items-center p-6">

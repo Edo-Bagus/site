@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import { owner, stats } from "@/lib/data";
 import { Squiggle, Sparkle, Scribble, StickerBadge, GithubIcon, LinkedinIcon } from "./Doodles";
@@ -75,11 +76,14 @@ export function Hero() {
             <div className="absolute inset-0 translate-x-3 translate-y-3 rotate-3 rounded-[2rem] bg-lime" />
             {/* photo card */}
             <div className="grain absolute inset-0 -rotate-2 overflow-hidden rounded-[2rem] border border-border bg-surface">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              {/* LCP element: eager + high priority, sized so it reserves layout. */}
+              <Image
                 src="/profile.jpg"
-                alt={owner.name}
-                className="h-full w-full object-cover"
+                alt={`${owner.name}, ${owner.headlineTechnical} based in ${owner.location}`}
+                fill
+                sizes="(max-width: 1024px) 88vw, 22rem"
+                priority
+                className="object-cover"
               />
             </div>
             <StickerBadge className="absolute -bottom-5 -left-5 h-24 w-24 rotate-[-8deg]">

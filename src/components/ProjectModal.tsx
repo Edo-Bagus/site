@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -160,19 +161,23 @@ function Dialog({ project, onClose }: { project: Project; onClose: () => void })
                     {g.src ? (
                       <>
                         {/* blurred fill so the frame is never empty */}
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
+                        <Image
                           src={g.src}
                           alt=""
                           aria-hidden
-                          className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl"
+                          fill
+                          sizes="(max-width: 640px) 100vw, 640px"
+                          className="scale-110 object-cover blur-2xl"
                         />
                         {/* sharp, fully-visible image on top */}
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
+                        <Image
                           src={g.src}
-                          alt={g.caption}
-                          className="relative h-full w-full object-contain"
+                          alt={`${project.title}: ${g.caption}`}
+                          fill
+                          sizes="(max-width: 640px) 100vw, 640px"
+                          // Only the visible slide is worth fetching eagerly.
+                          priority={i === 0}
+                          className="relative object-contain"
                         />
                       </>
                     ) : (
