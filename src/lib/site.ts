@@ -18,7 +18,7 @@ export const siteTitle = `${owner.name} · ${owner.headlineTechnical}`;
  * instead of truncating mid-sentence.
  */
 export const siteDescription =
-  "Portfolio of Eduardus Bagus Wicaksono (Edo Bagus), Software & AI Engineer in Yogyakarta. " +
+  "Portfolio of Eduardus Bagus W. (Edo Bagus), Software & AI Engineer in Yogyakarta. " +
   "Backend, AI and data work, from crash-detection ML to a live rental SaaS.";
 
 export const absolute = (path: string) => `${siteUrl}${path.startsWith("/") ? path : `/${path}`}`;
