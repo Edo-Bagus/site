@@ -13,9 +13,12 @@ export const siteName = `${owner.shortName} · Portfolio`;
 /** Keeps the tab title, OG title and structured data saying the same thing. */
 export const siteTitle = `${owner.name} · ${owner.headlineTechnical}`;
 
+/**
+ * Kept under ~160 characters (~965px at 13px Arial) so Google shows it whole
+ * instead of truncating mid-sentence.
+ */
 export const siteDescription =
-  "Portfolio of Eduardus Bagus Wicaksono (Edo Bagus), a Software & AI Engineer in Yogyakarta " +
-  "focused on backend and data. Crash-detection ML at 99.5% recall, a Wi-Fi CSI people-counting " +
-  "thesis at 93.6% accuracy, and a rental SaaS running in 10 businesses.";
+  "Portfolio of Eduardus Bagus Wicaksono (Edo Bagus), Software & AI Engineer in Yogyakarta. " +
+  "Backend, AI and data work, from crash-detection ML to a live rental SaaS.";
 
 export const absolute = (path: string) => `${siteUrl}${path.startsWith("/") ? path : `/${path}`}`;

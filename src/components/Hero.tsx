@@ -9,12 +9,21 @@ export function Hero() {
       <div className="relative z-10 mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-12 sm:pt-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:pb-24 lg:pt-20">
         {/* Left: copy */}
         <div className="reveal flex flex-col justify-center">
-          <p className="mb-5 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-ink">
-            <span className="inline-block h-px w-8 bg-lime-strong" />
-            Hi, I&apos;m {owner.shortName}
-          </p>
-
+          {/*
+            The eyebrow lives INSIDE the h1 so the heading carries the full name
+            (the main search query for a portfolio) while rendering identically:
+            it keeps the same mb-5 and type styles it had as a sibling <p>.
+            The visible short name stays; the full legal name is read by crawlers
+            and screen readers via the sr-only span.
+          */}
           <h1 className="font-display text-[13vw] font-bold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+            <span className="mb-5 flex items-center gap-2 font-mono text-xs font-normal uppercase tracking-[0.2em] text-muted-ink">
+              <span className="inline-block h-px w-8 bg-lime-strong" />
+              <span>
+                Hi, I&apos;m <span aria-hidden>{owner.shortName}</span>
+                <span className="sr-only">{owner.name}</span>
+              </span>
+            </span>
             Software &amp;{" "}
             <span className="relative inline-block whitespace-nowrap">
               <span className="relative z-10">AI Engineer</span>
